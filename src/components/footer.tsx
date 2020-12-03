@@ -10,6 +10,9 @@ type StaticQueryData = {
   site: {
     siteMetadata: {
       title: string
+      author: {
+        name: string
+      }
     }
   }
 }
@@ -21,6 +24,9 @@ const Footer: React.FC = () => (
         site {
           siteMetadata {
             title
+            author {
+              name
+            }
           }
         }
       }
@@ -29,9 +35,12 @@ const Footer: React.FC = () => (
       return (
         <StyledFooter className="footer">
           © {new Date().getFullYear()},{` `}
-          <Link to={`/`}>{data.site.siteMetadata.title}</Link>. Built with
+          <Link to={`/`}>
+            {data.site.siteMetadata.author.name} / {data.site.siteMetadata.title}
+          </Link>
+          . Built with
           {` `}
-          <a href="https://www.gatsbyjs.org">Gatsby</a>
+          <a href="https://www.gatsbyjs.org">Gatsby</a>. Inspired by <a href="https://jeffrafter.com">jeffrafter.com</a>
         </StyledFooter>
       )
     }}

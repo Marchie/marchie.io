@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
-    title: `marchie.net`,
-    description: `Personal website of Chris March`,
+    title: `marchie.io`,
+    description: `Chris March's software engineering blog: software development problems I've encountered and the solutions I have implemented`,
     author: {
       name: `Chris March`,
     },
@@ -43,18 +43,18 @@ module.exports = {
       resolve: `gatsby-plugin-manifest`,
       options: {
         name: `Chris March`,
-        short_name: `marchie.net`,
+        short_name: `marchie.io`,
         start_url: `/`,
         background_color: `#ffffff`,
         theme_color: `#663399`,
         display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        icon: `src/images/lyndon.jpg`, // This path is relative to the root of the site.
       },
     },
     {
       resolve: `gatsby-plugin-canonical-urls`,
       options: {
-        siteUrl: `https://marchie.net`,
+        siteUrl: `https://marchie.io`,
       },
     },
     `gatsby-plugin-react-helmet`,
@@ -64,6 +64,6 @@ module.exports = {
     `gatsby-transformer-sharp`,
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
-    // `gatsby-plugin-offline`,
+    `gatsby-plugin-offline`,
   ],
 }

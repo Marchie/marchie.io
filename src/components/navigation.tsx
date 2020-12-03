@@ -23,7 +23,7 @@ const Navigation: React.FC = () => (
   <StyledNav className="navigation">
     <ul>
       <li>
-        <Link to={`/`}>&</Link>
+        <Link to={`/`}>marchie.io</Link>
       </li>
       <li>
         <Link to={`/tags`}>Tags</Link>

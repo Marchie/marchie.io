@@ -14,8 +14,10 @@ const Tags: React.FC<Props> = ({data}) => {
   return (
     <Layout title={siteTitle}>
       <Head title={`All tags`} />
-      <article>
+      <header>
         <h1>All tags</h1>
+      </header>
+      <article>
         <div className={`page-content`}>
           {group &&
             group.map(

@@ -24,7 +24,15 @@ const About: React.FC<Props> = ({data}) => {
           </p>
         </section>
         <section>
-          <h2>Stalk me online</h2>
+          <p>
+            This is my place to write about software development problems that I have found challenging and the
+            solutions that I have implemented.
+          </p>
+        </section>
+        <section>
+          <p>
+            You can find my personal blog at <a href="https://marchie.net">marchie.net</a>.
+          </p>
         </section>
       </article>
     </Layout>

@@ -18,6 +18,10 @@ const defaults = (): string => `
   background-color: ${theme.colors.contrastLightest};
   color: rgba(0, 0, 0, 0.7);
 }
+
+p code[class*="language-"] {
+  font-size: 0.8em;
+}
 `
 
 export const GlobalStyle = createGlobalStyle`

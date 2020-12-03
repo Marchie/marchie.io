@@ -15,7 +15,10 @@ const Index: React.FC<Props> = ({data}) => {
   return (
     <Layout>
       <Head title={'All posts'} />
-
+      <header>
+        <h1>marchie.io</h1>
+        <p>By Chris March</p>
+      </header>
       <article>
         <div className={`page-content`}>
           {posts.map(({node}) => {
@@ -26,7 +29,7 @@ const Index: React.FC<Props> = ({data}) => {
                   <Link to={node.fields.slug}>{title}</Link>
                 </h3>
                 <small>{node.frontmatter.date}</small>
-                <p dangerouslySetInnerHTML={{__html: node.excerpt}} />
+                <p dangerouslySetInnerHTML={{__html: node.frontmatter.description}} />
               </div>
             )
           })}
@@ -45,12 +48,12 @@ interface PageQueryData {
   allMarkdownRemark: {
     edges: {
       node: {
-        excerpt: string
         fields: {
           slug: string
         }
         frontmatter: {
           date: string
+          description: string
           title: string
         }
       }
@@ -71,12 +74,12 @@ export const pageQuery = graphql`
     ) {
       edges {
         node {
-          excerpt
           fields {
             slug
           }
           frontmatter {
             date(formatString: "D MMMM YYYY")
+            description
             title
           }
         }
