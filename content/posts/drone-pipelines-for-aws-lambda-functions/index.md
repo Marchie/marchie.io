@@ -23,8 +23,8 @@ to worry about when it comes to things like keeping servers patched and secure.
 
 There has always been one small problem: there didn't seem to be a way to adequately test the Lambda function locally.
 Unit tests are one thing - and you can structure your code so that pretty much all of it is covered by unit
-tests[^unit-tests] - but at some point, you actually have to run the program... and as far as I knew, the only way to do
-that with Lambda functions was to actually deploy them to an AWS environment.
+tests - but at some point, you actually have to run the program... and as far as I knew, the only way to do
+that with Lambda functions was to actually deploy them to an AWS environment.[^unit-tests]
 
 [^unit-tests]: **Unit tests** focus on individual methods within the application, testing them in isolation from other
     methods and mocking out any dependencies.
@@ -129,8 +129,8 @@ unit test coverage, but these don't prove beyond doubt that the Lambda function 
 
 ## What would a functional test look like?
 
-Our functional test should treat our system as a "black-box".[^black-box] Our test should check the behaviours defined
-in our requirements, which we could describe as follows:
+Our functional test should treat our system as a "black-box". Our test should check the behaviours defined
+in our requirements, which we could describe as follows:[^black-box]
 
 [^black-box]: We have no visibility or knowledge of the internal workings or structures of a "black-box"; we can only
     test the behaviour that a black-box exhibits.
@@ -160,8 +160,8 @@ Most of the common AWS services are available in LocalStack and in our case, it 
 for our functional test. We can set up an API Gateway to provide a HTTP endpoint we can send POST requests to; we can
 configure this API Gateway to trigger our Lambda function whenever it receives a HTTP request; and we can create an SNS
 topic for the Lambda function to publish messages to. The only thing we can't do in the community edition of LocalStack
-is provide an ElastiCache Redis store.[^localstack-pro] However, since this is all Docker under the hood, we can spin up
-Redis in a separate Docker container.
+is provide an ElastiCache Redis store. However, since this is all Docker under the hood, we can spin up
+Redis in a separate Docker container.[^localstack-pro]
 
 [^localstack-pro]: ElastiCache _is_ available in the [LocalStack Pro edition](https://localstack.cloud/), however I've
     not used this service.
@@ -282,8 +282,8 @@ _docker-compose.yml_ file.
     image: localstack/localstack:latest
 ```
 
-For each service, we specify an image.[^docker-image] We are using images that are maintained by the Docker community
-for all of our services; they are publicly available on [Docker Hub](https://hub.docker.com).
+For each service, we specify an image. We are using images that are maintained by the Docker community
+for all of our services; they are publicly available on [Docker Hub](https://hub.docker.com).[^docker-image]
 
 [^docker-image]: A Docker image contains all the information needed to run a containerised application.
 
@@ -295,8 +295,8 @@ be built from the image and the container will be started up.
     - testnet
 ```
 
-Next up, we have the networks array.[^docker-network] We specify the network as `testnet`, which is a reference to a
-network that we define later on in the `docker-compose.yml` file:
+Next up, we have the networks array. We specify the network as `testnet`, which is a reference to a
+network that we define later on in the `docker-compose.yml` file:[^docker-network]
 
 [^docker-network]: A Docker network provides a mechanism for Docker containers to communicate with each other.
 
@@ -369,9 +369,9 @@ located.[^docker-compose-project-name]
       - localstack_tmp:/tmp/localstack
 ```
 
-The last key in our LocalStack service definition is the **volumes** array.[^docker-volumes] Here, we map the
+The last key in our LocalStack service definition is the **volumes** array. Here, we map the
 `docker.sock` from our host machine onto the `/var/run/docker.sock` in the LocalStack container. LocalStack uses the
-Docker daemon from our host machine to create the container when a Lambda function is invoked.
+Docker daemon from our host machine to create the container when a Lambda function is invoked.[^docker-volumes]
 
 [^docker-volumes]: A Docker volume is a method for giving a container access to a disk location on the host machine.
 
@@ -502,10 +502,10 @@ Now, we move onto the configuration for our own code!
 The **REDIS\_SERVER\_ADDRESS** is set to `redis:6379` - remember that Docker will provide a DNS service that translates
 the service name to an IP address.
 
-We set the **SNS\_TOPIC\_ARN** to an arbitrary value.[^arn] In the live environment, the SNS topic will already exist,
+We set the **SNS\_TOPIC\_ARN** to an arbitrary value. In the live environment, the SNS topic will already exist,
 so we will be able to provide the ARN in the environment. However, with our functional test, the environment gets set up
 as part of the test and we don't know what the ARN will be until it has been set up. So, we overwrite this value in our
-test setup code once the SNS topic has been created.
+test setup code once the SNS topic has been created.[^arn]
 
 [^arn]: **ARN** stands for "Amazon Resource Name". They uniquely identify resources on AWS.
 
@@ -622,10 +622,9 @@ localstack_1      | 2020-11-29T03:07:32:WARNING:localstack.utils.server.http2_se
 ```
 
 This happens because there only way to tell whether the LocalStack services are available is to try and use
-them.[^depends-on]
-Our test runs a "list" type command in a loop against each service to see if it is available: if the command is
+them. Our test runs a "list" type command in a loop against each service to see if it is available: if the command is
 successful, we know the service is available and we can proceed further with our test. However, if the service is not
-yet available, LocalStack will log a warning.
+yet available, LocalStack will log a warning.[^depends-on]
 
 [^depends-on]: Docker Compose does have the [depends_on](https://docs.docker.com/compose/compose-file/#depends_on)
     array, however this only checks that the containers we're depending on have **started** - it doesn't check that the
@@ -638,10 +637,11 @@ want to run all of our tests as part of a continuous integration/continuous deli
 [Drone](https://drone.io) for this.
 
 Drone pipelines are configured with a YAML configuration file, normally named _.drone.yml_, which is included in the
-same repository as your application code.[^config-as-code] Drone's YAML configuration file is a superset of Docker
-Compose: Drone pipelines are executed inside Docker containers.
+same repository as your application code. Drone's YAML configuration file is a superset of Docker
+Compose: Drone pipelines are executed inside Docker containers.[^config-as-code]
 
-[^config-as-code]: This practice is known as "configuration as code".
+[^config-as-code]: Including build pipeline configuration alongside your application source code is known as 
+    "configuration as code".
 
 Here is a _.drone.yml_ file which performs all of the functions in the _docker-compose.yml_ described above:
 
@@ -734,9 +734,9 @@ volumes:
     host:
       path: /var/run/docker.sock
   - name: tempdir
-    temp: { }
+    temp: {}
   - name: godeps
-    temp: { }
+    temp: {}
 ```
 
 We're not using all of the options available in Drone - you can check out
@@ -802,11 +802,10 @@ docker-compose.yml_ file.
 
 One key difference to point out is the value for **LAMBDA\_DOCKER\_NETWORK**, which we have set to
 `$DRONE_DOCKER_NETWORK_ID`. Drone creates a new Docker network with a random name each time the pipeline is
-executed;[^drone-network-id]
-the name of this network is stored in the `DRONE_DOCKER_NETWORK_ID` environment variable, which is available to the
-process that parses our _.drone.yml_ file. By defining **LAMBDA\_DOCKER\_NETWORK** as `$DRONE_DOCKER_NETWORK_ID`,
+executed; the name of this network is stored in the `DRONE_DOCKER_NETWORK_ID` environment variable, which is available 
+to the process that parses our _.drone.yml_ file. By defining **LAMBDA\_DOCKER\_NETWORK** as `$DRONE_DOCKER_NETWORK_ID`,
 Drone's YAML parser will substitute in the Docker network name from the environment, and our Lambda can communicate with
-our other containers.
+our other containers.[^drone-network-id]
 
 [^drone-network-id]: This is different from the case we saw in our _docker-compose.yml_ file, where we defined the
     Docker network within the _docker-compose.yml_ file and therefore knew what its name would be in advance.
@@ -823,9 +822,9 @@ volumes:
     host:
       path: /var/run/docker.sock
   - name: tempdir
-    temp: { }
+    temp: {}
   - name: godeps
-    temp: { }
+    temp: {}
 ```
 
 There are two types of volume available - **host**, which maps to a physical location on the host machine, and **temp**,
@@ -1239,9 +1238,9 @@ LocalStack container can access it.
 
 ### Challenge #2: **Networking**
 
-Our pipeline will be running in a single Kubernetes pod.[^pod] This means we no longer have Docker's DNS service to
+Our pipeline will be running in a single Kubernetes pod. This means we no longer have Docker's DNS service to
 facilitate communication between our containers; we can no longer refer to the name of a container in our application
-configuration.
+configuration.[^pod]
 
 [^pod]: A [pod](https://kubernetes.io/docs/concepts/workloads/pods/) is a group of one or more containers, with shared
     storage/network resources, and a specification for how to run the containers.
